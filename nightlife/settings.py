@@ -1,4 +1,3 @@
-
 """
 Django settings for nightlife project.
 """
@@ -22,15 +21,14 @@ ALLOWED_HOSTS = [
     '.up.railway.app',
 ]
 
-# Railway CSRF configuration
-RAILWAY_PUBLIC_DOMAIN = os.environ.get('RAILWAY_PUBLIC_DOMAIN')
+# Railway CSRF / HTTPS configuration
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.up.railway.app',
+]
 
-CSRF_TRUSTED_ORIGINS = []
-
-if RAILWAY_PUBLIC_DOMAIN:
-    CSRF_TRUSTED_ORIGINS.append(
-        f'https://{RAILWAY_PUBLIC_DOMAIN}'
-    )
+# Railway's proxy forwards requests to Django over http,
+# so tell Django the original request was https
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Application definition
