@@ -1,0 +1,267 @@
+{% extends 'organizer/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+/* Container Card */
+
+.event-card{
+background: rgba(15,15,15,0.95);
+backdrop-filter: blur(12px);
+border-radius:22px;
+padding:35px;
+box-shadow:0 25px 80px rgba(0,0,0,0.9);
+border:1px solid rgba(176,38,255,0.25);
+color:white;
+}
+
+/* Table */
+
+.event-table{
+background:transparent;
+color:white;
+}
+
+.event-table thead th{
+background:linear-gradient(45deg,#b026ff,#8a00d4);
+border:none;
+color:white;
+font-weight:600;
+}
+
+/* Remove bootstrap white */
+
+.table>:not(caption)>*>*{
+background:transparent !important;
+color:white !important;
+}
+
+/* Row */
+
+.event-table tbody tr{
+background:rgba(255,255,255,0.03);
+border-bottom:1px solid rgba(255,255,255,0.05);
+transition:0.25s;
+}
+
+.event-table tbody tr:hover{
+background:rgba(176,38,255,0.12);
+transform:scale(1.01);
+}
+
+/* Event image */
+
+.event-img{
+width:65px;
+height:65px;
+border-radius:10px;
+object-fit:cover;
+}
+
+/* Event title */
+
+.event-title{
+color:#b026ff;
+font-weight:600;
+}
+
+/* Description */
+
+.event-desc{
+color:#aaa;
+font-size:14px;
+}
+
+/* Buttons */
+
+.edit-btn{
+background:linear-gradient(45deg,#ffc107,#ff9800);
+border:none;
+}
+
+.delete-btn{
+background:linear-gradient(45deg,#ff3d3d,#c40000);
+border:none;
+}
+
+/* Status badges */
+
+.badge{
+padding:6px 14px;
+border-radius:18px;
+font-size:12px;
+font-weight:600;
+}
+
+</style>
+
+<div style="min-height:80vh; padding-top:120px; padding-bottom:60px;">
+
+<div class="container">
+
+<div class="event-card">
+
+<center>
+<h2 class="fw-bold mb-4">Event Details</h2>
+</center>
+
+<div class="table-responsive">
+
+<table class="table event-table align-middle">
+
+<thead>
+<tr>
+<th>Event</th>
+<th>Date</th>
+<th>Time</th>
+<th>Location</th>
+<th>Price</th>
+<th>Tickets</th>
+<th>Description</th>
+<th>Verification</th>
+<th>Event Status</th>
+<th>Edit</th>
+<th>Delete</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for i in event %}
+
+<tr>
+
+<td>
+
+<div class="d-flex align-items-center gap-3">
+
+{% if i.event_image %} <img src="{{ i.event_image.url }}" class="event-img">
+{% endif %}
+
+<div class="event-title">
+{{ i.event_name }}
+</div>
+
+</div>
+
+</td>
+
+<td>{{ i.event_date }}</td>
+
+<td>{{ i.event_time }}</td>
+
+<td>{{ i.location }}</td>
+
+<td>₹{{ i.price }}</td>
+
+<td>
+
+{% if i.total_tickets > 0 %} <span class="badge bg-info">{{ i.total_tickets }} left</span>
+{% else %} <span class="badge bg-danger">Sold Out</span>
+{% endif %}
+
+</td>
+
+<td class="event-desc">
+{{ i.description|truncatewords:10 }}
+</td>
+
+<!-- Verification Status -->
+
+<td>
+
+{% if i.status == "pending" %}
+
+<span class="badge bg-warning text-dark">
+Pending
+</span>
+
+{% elif i.status == "approved" %}
+
+<span class="badge bg-success">
+Approved
+</span>
+
+{% elif i.status == "rejected" %}
+
+<span class="badge bg-danger">
+Rejected
+</span>
+
+{% endif %}
+
+</td>
+
+<!-- Event Status -->
+
+<td>
+
+{% if i.event_date < today %}
+
+<span class="badge bg-danger">
+Completed
+</span>
+
+{% elif i.event_date == today and i.event_time <= now %}
+
+<span class="badge bg-warning text-dark">
+Live Now
+</span>
+
+{% else %}
+
+<span class="badge bg-success">
+Upcoming
+</span>
+
+{% endif %}
+
+</td>
+
+<td>
+
+<form action="/organizer/edit_event" method="post">
+{% csrf_token %}
+<input type="hidden" name="id" value="{{ i.id }}">
+<button class="btn edit-btn btn-sm text-white">Edit</button>
+</form>
+
+</td>
+
+<td>
+
+<a href="{% url 'delete_event' %}?id={{ i.id }}" class="btn delete-btn btn-sm text-white">
+Delete
+</a>
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="11" class="text-center text-light">
+No Events Found
+</td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

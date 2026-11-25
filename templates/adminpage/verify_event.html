@@ -1,0 +1,325 @@
+{% extends 'adminpage/base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if message %}
+
+<script>
+alert("{{ message }}")
+</script>
+
+{% endif %}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+/* CARD */
+
+.verify-card{
+background:rgba(15,15,15,0.95);
+border-radius:22px;
+padding:35px;
+box-shadow:0 25px 80px rgba(0,0,0,0.9);
+border:1px solid rgba(176,38,255,0.25);
+color:white;
+}
+
+/* TABLE */
+
+.verify-table{
+background:transparent;
+color:white;
+}
+
+.table>:not(caption)>*>*{
+background:transparent !important;
+color:white !important;
+}
+
+.verify-table thead th{
+background:linear-gradient(45deg,#b026ff,#8a00d4);
+border:none;
+padding:16px;
+font-weight:600;
+}
+
+/* Prevent header wrapping */
+
+.event-status-head{
+white-space:nowrap;
+min-width:130px;
+}
+
+/* ROW */
+
+.verify-table tbody tr{
+background:rgba(255,255,255,0.03);
+border-bottom:1px solid rgba(255,255,255,0.05);
+transition:0.25s;
+}
+
+.verify-table tbody tr:hover{
+background:rgba(176,38,255,0.08);
+}
+
+/* ORGANIZER */
+
+.organizer-box{
+line-height:1.5;
+}
+
+.organizer-name{
+font-weight:600;
+}
+
+.organizer-info{
+font-size:13px;
+color:#aaa;
+}
+
+/* EVENT */
+
+.event-box{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.event-img{
+width:70px;
+height:55px;
+border-radius:10px;
+object-fit:cover;
+}
+
+.event-name{
+color:#b026ff;
+font-weight:600;
+}
+
+/* DESCRIPTION */
+
+.event-desc{
+font-size:14px;
+color:#bbb;
+max-width:220px;
+}
+
+/* VERIFY BUTTONS */
+
+.verify-actions{
+display:flex;
+gap:8px;
+margin-top:8px;
+}
+
+.approve-btn{
+background:#22c55e;
+border:none;
+}
+
+.reject-btn{
+background:#ef4444;
+border:none;
+}
+
+/* BADGES */
+
+.badge{
+font-size:12px;
+padding:5px 12px;
+border-radius:14px;
+font-weight:500;
+letter-spacing:0.3px;
+}
+
+/* EVENT STATUS COLORS */
+
+.status-upcoming{
+background:#2563eb;
+}
+
+.status-live{
+background:#f59e0b;
+color:black;
+}
+
+.status-completed{
+background:#ef4444;
+}
+
+</style>
+
+<div style="min-height:80vh; padding-top:120px; padding-bottom:60px;">
+
+<div class="container">
+
+<div class="verify-card">
+
+<center>
+<h2 class="fw-bold mb-4">Verify Event</h2>
+</center>
+
+<div class="table-responsive">
+
+<table class="table verify-table align-middle">
+
+<thead>
+
+<tr>
+<th>Organizer</th>
+<th>Event</th>
+<th>Date</th>
+<th>Time</th>
+<th>Location</th>
+<th>Price</th>
+<th>Tickets</th>
+<th>Description</th>
+<th>Verification</th>
+<th class="event-status-head">Event Status</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for i in event %}
+
+<tr>
+
+<td>
+
+<div class="organizer-box">
+
+<div class="organizer-name">
+{{ i.organizer.user.first_name }}
+</div>
+
+<div class="organizer-info">
+📧 {{ i.organizer.user.email }}
+</div>
+
+<div class="organizer-info">
+📞 {{ i.organizer.phone }}
+</div>
+
+</div>
+
+</td>
+
+<td>
+
+<div class="event-box">
+
+{% if i.event_image %} <img src="{{ i.event_image.url }}" class="event-img">
+{% endif %}
+
+<div class="event-name">
+{{ i.event_name }}
+</div>
+
+</div>
+
+</td>
+
+<td>{{ i.event_date }}</td>
+
+<td>{{ i.event_time }}</td>
+
+<td>{{ i.location }}</td>
+
+<td>₹{{ i.price }}</td>
+
+<td>{{ i.total_tickets }}</td>
+
+<td class="event-desc">
+{{ i.description|truncatewords:12 }}
+</td>
+
+<!-- VERIFICATION -->
+
+<td>
+
+{% if i.status == 'pending' %}
+
+<span class="badge bg-warning text-dark">Pending</span>
+
+<div class="verify-actions">
+
+<a href="{% url 'approve_event' %}?id={{i.id}}" class="btn approve-btn btn-sm text-white">
+Approve
+</a>
+
+<a href="{% url 'reject_event' %}?id={{i.id}}" class="btn reject-btn btn-sm text-white">
+Reject
+</a>
+
+</div>
+
+{% elif i.status == 'approved' %}
+
+<span class="badge bg-success">Approved</span>
+
+{% elif i.status == 'rejected' %}
+
+<span class="badge bg-danger">Rejected</span>
+
+{% endif %}
+
+</td>
+
+<!-- EVENT STATUS -->
+
+<td>
+
+{% if i.event_date < today %}
+
+<span class="badge status-completed">
+Completed
+</span>
+
+{% elif i.event_date == today and i.event_time <= now %}
+
+<span class="badge status-live">
+Live Now
+</span>
+
+{% else %}
+
+<span class="badge status-upcoming">
+Upcoming
+</span>
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+
+<td colspan="10" class="text-center text-light">
+No Events Found
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

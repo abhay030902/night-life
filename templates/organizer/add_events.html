@@ -1,0 +1,84 @@
+{% extends "organizer/base.html" %}
+{% load static %}
+{% block content %}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="col-11 col-sm-9 col-md-7 col-lg-5">
+         
+        <div class="card p-5 shadow-lg text-white"
+             style="background: rgba(8, 6, 6, 0.45); border-radius: 24px;">
+
+            <h2 class="text-center fw-bold mb-4">Add Event</h2>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label fs-6">Event Name</label>
+                    <input type="text" name="event_name"
+                           class="form-control form-control-lg" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fs-6">Event Date</label>
+                    <input type="date" name="event_date"
+                           class="form-control form-control-lg" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fs-6">Event Time</label>
+                    <input type="time" name="event_time"
+                           class="form-control form-control-lg" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fs-6">Location</label>
+                    <input type="text" name="location"
+                           class="form-control form-control-lg" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fs-6">Ticket Price (₹)</label>
+                    <input type="number" name="price" min="0"
+                           class="form-control form-control-lg" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fs-6">Total Tickets</label>
+                    <input type="number" name="total_tickets" min="1"
+                           class="form-control form-control-lg" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fs-6">Event Image</label>
+                    <input type="file" name="event_image"
+                           class="form-control form-control-lg"
+                           accept="image/*" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fs-6">Event Description</label>
+                    <textarea name="description" rows="3"
+                              class="form-control form-control-lg" required></textarea>
+                </div>
+
+                {% if error %}
+                <div class="alert alert-danger text-center">
+                    {{ error }}
+                </div>
+                {% endif %}
+
+                <button class="btn btn-lg w-100 rounded-pill fw-semibold"
+                        style="background: linear-gradient(45deg,#b026ff,#8a00d4); color:white;">
+                    Add Event
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

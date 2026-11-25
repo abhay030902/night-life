@@ -1,0 +1,99 @@
+{% extends "organizer/base.html" %}
+{% load static %}
+{% block content %}
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="tagline fade-in">The Ultimate Experience</div>
+            <h1 class="glitch-text" data-text="MIDNIGHT">MIDNIGHT</h1>
+            <h1 class="glitch-text sub" data-text="MADNESS">MADNESS</h1>
+            <p class="fade-in-delay">Join the elite for a night of neon, sound, and pure energy.</p>
+            <div class="cta-group fade-in-delay">
+                <a href="#services" class="btn-primary">Book VIP Table</a>
+                <a href="#about" class="btn-secondary">Explore</a>
+            </div>
+        </div>
+        
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+    </section>
+
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title reveal">About The <span class="highlight">Night</span></h2>
+            <div class="about-grid">
+                <div class="about-text reveal">
+                    <p>Euphoria isn't just a party; it's a sensory overload. Located in the heart of the neon district, we bring together world-class DJs, immersive laser shows, and an atmosphere that vibrates with energy.</p>
+                    <div class="stats">
+                        <div class="stat-box">
+                            <h3>10+</h3>
+                            <p>Artists</p>
+                        </div>
+                        <div class="stat-box">
+                            <h3>3</h3>
+                            <p>Stages</p>
+                        </div>
+                        <div class="stat-box">
+                            <h3>∞</h3>
+                            <p>Vibes</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image reveal">
+                    <img src="https://images.unsplash.com/photo-1566737236500-c8ac43014a67?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="Party Crowd">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="section bg-dark">
+        <div class="container">
+            <h2 class="section-title reveal">Our <span class="highlight">Services</span></h2>
+            <div class="services-grid">
+                <div class="service-card reveal">
+                    <div class="icon-box"><i class="fas fa-glass-cheers"></i></div>
+                    <h3>VIP Bottle Service</h3>
+                    <p>Premium selection delivered straight to your private booth with sparklers and hype.</p>
+                </div>
+                <div class="service-card reveal">
+                    <div class="icon-box"><i class="fas fa-music"></i></div>
+                    <h3>Private Lounges</h3>
+                    <p>Exclusive soundproof areas for you and your crew to enjoy the vibe in privacy.</p>
+                </div>
+                <div class="service-card reveal">
+                    <div class="icon-box"><i class="fas fa-birthday-cake"></i></div>
+                    <h3>Event Hosting</h3>
+                    <p>Celebrating something special? Let us curate a custom experience for your group.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section">
+        <div class="container contact-container reveal">
+            <div class="contact-info">
+                <h2>Get In <span class="highlight">Touch</span></h2>
+                <p>Ready to reserve your spot? Contact us directly.</p>
+                <div class="contact-item">
+                    <i class="fas fa-phone-alt"></i>
+                    <span>+1 (555) 000-1234</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>vip@euphoria.com</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>101 Neon Ave, Night City</span>
+                </div>
+            </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 EUPHORIA NIGHTLIFE. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script src="{% static "script.js" %}"></script>
+</body>
+</html>
+{% endblock content %}

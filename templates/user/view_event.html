@@ -1,0 +1,176 @@
+{% extends 'user/base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if message %}
+
+<script>
+alert("{{ message }}")
+</script>
+
+{% endif %}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+/* CARD STYLE */
+
+.event-card{
+background: rgba(20,20,20,0.85);
+backdrop-filter: blur(8px);
+border-radius:18px;
+border:1px solid rgba(255,255,255,0.08);
+box-shadow:0 15px 40px rgba(0,0,0,0.6);
+transition:0.3s;
+overflow:hidden;
+color:white;
+}
+
+.event-card:hover{
+transform:translateY(-6px);
+}
+
+/* IMAGE */
+
+.event-img{
+height:220px;
+object-fit:cover;
+transition:0.4s;
+}
+
+.event-card:hover .event-img{
+transform:scale(1.05);
+}
+
+/* TITLE */
+
+.event-title{
+color:#b026ff;
+}
+
+/* BUTTON */
+
+.view-btn{
+background:linear-gradient(45deg,#b026ff,#8a00d4);
+border:none;
+}
+
+.view-btn:hover{
+box-shadow:0 5px 20px rgba(176,38,255,0.5);
+}
+
+/* SOLD OUT BADGE */
+
+.sold-out{
+background:#ff3d3d;
+color:white;
+padding:4px 10px;
+border-radius:6px;
+font-size:12px;
+font-weight:600;
+margin-left:8px;
+}
+
+/* TICKET COUNT */
+
+.ticket-count{
+color:#17a2b8;
+font-weight:600;
+}
+
+</style>
+
+<div style="min-height:80vh; padding-top:120px; padding-bottom:60px;">
+
+<div class="container">
+
+<center>
+<h1 class="mb-5 text-white fw-bold">Upcoming Events</h1>
+</center>
+
+<div class="row g-4">
+
+{% for i in event %}
+
+<div class="col-lg-4 col-md-6">
+
+<div class="card event-card h-100">
+
+{% if i.event_image %} <img src="{{ i.event_image.url }}" class="card-img-top event-img">
+{% else %}
+
+<div class="text-center p-5 bg-dark text-light">No Image</div>
+{% endif %}
+
+<div class="card-body">
+
+<h5 class="event-title fw-bold">
+{{ i.event_name }}
+
+{% if i.total_tickets == 0 %} <span class="sold-out">Sold Out</span>
+{% endif %}
+
+</h5>
+
+<p class="mb-1"><strong>Date:</strong> {{ i.event_date }}</p>
+
+<p class="mb-1"><strong>Time:</strong> {{ i.event_time }}</p>
+
+<p class="mb-1"><strong>Location:</strong> {{ i.location }}</p>
+
+<p class="mb-1"><strong>Price:</strong> ₹{{ i.price }}</p>
+
+<p class="mb-1">
+<strong>Tickets Left:</strong>
+
+{% if i.total_tickets > 0 %} <span class="ticket-count">{{ i.total_tickets }}</span>
+{% else %} <span class="text-danger fw-bold">0</span>
+{% endif %}
+
+</p>
+
+<p class="text-light mt-2">
+{{ i.description|truncatewords:18 }}
+</p>
+
+</div>
+
+<div class="card-footer bg-transparent border-0 text-end">
+
+{% if i.total_tickets > 0 %}
+
+<a href="{% url 'viewmore_event' %}?id={{ i.id }}" class="btn view-btn btn-sm text-white">
+View More
+</a>
+
+{% else %}
+
+<button class="btn btn-secondary btn-sm" disabled>
+Sold Out
+</button>
+
+{% endif %}
+
+</div>
+
+</div>
+
+</div>
+
+{% empty %}
+
+<div class="col-12 text-center text-light">
+<p>No events found</p>
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}
