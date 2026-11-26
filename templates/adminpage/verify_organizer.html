@@ -166,10 +166,14 @@ box-shadow:0 0 10px rgba(255,0,0,0.7);
 
 <td>
 
-{% if i.id_proof %} <img src="{{ i.id_proof.url }}" class="id-img">
+{% if i.id_proof %}
+    {% if '.pdf' in i.id_proof.name|lower %}
+        <a href="{{ i.id_proof.url }}" target="_blank" class="btn btn-sm btn-outline-light">View PDF</a>
+    {% else %}
+        <a href="{{ i.id_proof.url }}" target="_blank"><img src="{{ i.id_proof.url }}" class="id-img"></a>
+    {% endif %}
 {% else %} <span style="color:#777;">No File</span>
 {% endif %}
-
 </td>
 
 <td>
