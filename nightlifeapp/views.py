@@ -56,20 +56,26 @@ class organizersignup(TemplateView):
 class loginview(TemplateView):
     template_name = "login.html"
 
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         username = request.POST["username"]
         password = request.POST["password"]
-        user = authenticate(username=username,password=password)
-        if user is not None:
-            if user.last_name == '1': 
-                login(request,user)
-                if user.is_superuser:
-                    return redirect('/adminpage/')
-                elif usertype.objects.get(user_id=user.id).type == 'user':
-                    return redirect('/user/')
-                elif usertype.objects.get(user_id=user.id).type == 'organizer':
-                    return redirect('/organizer/')
-            else:
-                return HttpResponse(f"<script>alert('user account not verified');window.location.href='/login/'</script>")
-        else:
-            return HttpResponse(f"<script>alert('Invalid user name or password');window.location.href='/login/'</script>")
+        user = authenticate(username=username, password=password)
+
+        if user is None:
+            return HttpResponse("<script>alert('Invalid user name or password');window.location.href='/login/'</script>")
+
+        # Admin: no verification needed
+        if user.is_superuser:
+            login(request, user)
+            return redirect('/adminpage/')
+
+        # Users and organizers must be verified
+        if user.last_name == '1':
+            login(request, user)
+            user_type = usertype.objects.get(user_id=user.id).type
+            if user_type == 'user':
+                return redirect('/user/')
+            elif user_type == 'organizer':
+                return redirect('/organizer/')
+
+        return HttpResponse("<script>alert('user account not verified');window.location.href='/login/'</script>")
